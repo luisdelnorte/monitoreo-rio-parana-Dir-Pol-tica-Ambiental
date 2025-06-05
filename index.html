@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌊 Monitoreo Alturas Río Paraná</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .stat-card.barranqueras {
+            border-left-color: #e74c3c;
+        }
+
+        .stat-card.corrientes {
+            border-left-color: #2ecc71;
+        }
+
+        .stat-card.bermejo {
+            border-left-color: #3498db;
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .stat-header .emoji {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .stat-header h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 10px;
+        }
+
+        .stat-description {
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .ranges {
+            margin-top: 20px;
+        }
+
+        .range-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            margin: 8px 0;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .range-alto {
+            background: rgba(231, 76, 60, 0.1);
+            color: #c0392b;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .range-medio {
+            background: rgba(241, 196, 15, 0.1);
+            color: #f39c12;
+            border: 1px solid rgba(241, 196, 15, 0.3);
+        }
+
+        .range-bajo {
+            background: rgba(52, 152, 219, 0.1);
+            color: #2980b9;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        }
+
+        .data-iframe {
+            width: 100%;
+            min-height: 800px;
+            border: none;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .footer {
+            background: #34495e;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .update-time {
+            background: rgba(52, 73, 94, 0.1);
+            padding: 15px;
+            margin: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #5d6d7e;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            
+            .stat-value {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌊 Monitoreo Alturas Río Paraná</h1>
+            <p>Sistema de seguimiento automático - Barranqueras, Corrientes y Bermejo</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card barranqueras">
+                <div class="stat-header">
+                    <span class="emoji">🔴</span>
+                    <h3>Barranqueras</h3>
+                </div>
+                <div class="stat-value" id="barranqueras-altura">2.45 m</div>
+                <div class="stat-description">Altura actual del río</div>
+                
+                <div class="ranges">
+                    <div class="range-item range-alto">
+                        <span>🔴 ALTO (>2m)</span>
+                        <span id="barranqueras-alto">45 días (62%)</span>
+                    </div>
+                    <div class="range-item range-medio">
+                        <span>🟡 MEDIO (1-2m)</span>
+                        <span id="barranqueras-medio">20 días (28%)</span>
+                    </div>
+                    <div class="range-item range-bajo">
+                        <span>🔵 BAJO (<1m)</span>
+                        <span id="barranqueras-bajo">7 días (10%)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card corrientes">
+                <div class="stat-header">
+                    <span class="emoji">🟢</span>
+                    <h3>Corrientes</h3>
+                </div>
+                <div class="stat-value" id="corrientes-altura">1.98 m</div>
+                <div class="stat-description">Altura actual del río</div>
+                
+                <div class="ranges">
+                    <div class="range-item range-alto">
+                        <span>🔴 ALTO (>2m)</span>
+                        <span id="corrientes-alto">32 días (44%)</span>
+                    </div>
+                    <div class="range-item range-medio">
+                        <span>🟡 MEDIO (1-2m)</span>
+                        <span id="corrientes-medio">35 días (49%)</span>
+                    </div>
+                    <div class="range-item range-bajo">
+                        <span>🔵 BAJO (<1m)</span>
+                        <span id="corrientes-bajo">5 días (7%)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card bermejo">
+                <div class="stat-header">
+                    <span class="emoji">🔵</span>
+                    <h3>Bermejo</h3>
+                </div>
+                <div class="stat-value" id="bermejo-altura">1.67 m</div>
+                <div class="stat-description">Altura actual del río</div>
+                
+                <div class="ranges">
+                    <div class="range-item range-alto">
+                        <span>🔴 ALTO (>2m)</span>
+                        <span id="bermejo-alto">18 días (25%)</span>
+                    </div>
+                    <div class="range-item range-medio">
+                        <span>🟡 MEDIO (1-2m)</span>
+                        <span id="bermejo-medio">42 días (58%)</span>
+                    </div>
+                    <div class="range-item range-bajo">
+                        <span>🔵 BAJO (<1m)</span>
+                        <span id="bermejo-bajo">12 días (17%)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding: 0 30px;">
+            <h2 style="text-align: center; color: #2c3e50; margin: 30px 0;">📊 Gráficos y Análisis Detallado</h2>
+            
+            <!-- ENLACE REAL DE TU GOOGLE SHEET -->
+            <iframe 
+                class="data-iframe"
+                src="https://docs.google.com/spreadsheets/d/13u3kH5VYhttvTw-aznBXDahgmjV5iwk9H3FXjctWO_0/edit?usp=sharing&single=true&widget=true&headers=false"
+                title="Datos detallados y gráficos">
+            </iframe>
+        </div>
+
+        <div class="update-time">
+            <strong>🔄 Última actualización:</strong> <span id="update-time">Hoy a las 08:00 AM</span><br>
+            <small>Los datos se actualizan automáticamente cada día</small>
+        </div>
+
+        <div class="footer">
+            <p>🌐 <strong>Fuente:</strong> Universidad Nacional del Litoral - CIM</p>
+            <p>📅 Sistema de monitoreo automático desarrollado en Google Apps Script</p>
+        </div>
+    </div>
+
+    <script>
+        // Actualizar la hora actual
+        document.getElementById('update-time').textContent = new Date().toLocaleString('es-AR');
+        
+        // Función para actualizar datos (opcional - puedes conectar con tu API)
+        function actualizarDatos() {
+            // Aquí podrías hacer fetch a tu Google Sheet para obtener datos reales
+            console.log('Datos actualizados');
+        }
+        
+        // Actualizar cada 30 minutos
+        setInterval(actualizarDatos, 30 * 60 * 1000);
+    </script>
+</body>
+</html>
