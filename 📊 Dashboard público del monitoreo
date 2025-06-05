@@ -194,18 +194,9 @@
             </div>
         </div>
 
-        <div class="graficos-seccion">
-            <h2 class="graficos-titulo">📊 Gráficos y Análisis</h2>
-            
-            <iframe 
-                class="data-iframe"
-                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vShcOTmqBVW3yqxyHJROk0MUxgZO13ikgod6WWIGhhmzfqnoJ2hnKrtPU05seNiAwgUGgC3bL7QZfDr/pubhtml?gid=476502502&single=true"
-                title="Gráficos y análisis detallado">
-            </iframe>
-        </div>
-
         <div class="update-time">
-            <strong>🔄 Última actualización:</strong> <span id="update-time">Hoy a las 08:00 AM</span>
+            <strong>🔄 Última actualización:</strong> <span id="update-time">Hoy a las 08:00 AM</span><br>
+            <small>🌐 Fuente: Universidad Nacional del Litoral - CIM</small>
         </div>
     </div>
 
