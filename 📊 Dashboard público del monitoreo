@@ -199,7 +199,7 @@
             
             <iframe 
                 class="data-iframe"
-                src="https://docs.google.com/spreadsheets/d/13u3kH5VYhttvTw-aznBXDahgmjV5iwk9H3FXjctWO_0/edit?usp=sharing&single=true&widget=true&headers=false"
+                src="https://docs.google.com/spreadsheets/d/13u3kH5VYhttvTw-aznBXDahgmjV5iwk9H3FXjctWO_0/edit?usp=sharing&single=true&widget=true&headers=false&gid=SHEET_ID_GRAFICOS"
                 title="Gráficos y análisis detallado">
             </iframe>
         </div>
